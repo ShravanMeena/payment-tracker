@@ -10,13 +10,14 @@ import React, {useEffect, useState} from 'react';
 import SPCard from '../../theme/SPCard';
 import {SPColors} from '../../theme/SPTheme';
 import SPText from '../../theme/SPText';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Button from '../../components/Button';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {LocalStorage} from '../../helpers/LocalStorage';
 import Error from '../error/Error';
+import HeaderButton from '../../components/HeaderButton';
+import {Text} from 'react-native-paper';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export function Item({item}) {
   const {navigate} = useNavigation();
@@ -24,12 +25,16 @@ export function Item({item}) {
     <SPCard mBottom={4}>
       <TouchableOpacity
         onPress={() => navigate('EditCategory', {item})}
-        style={styles.item}>
+        style={[styles.item]}>
         <SPCard row spaceBetween>
           <SPCard row center>
             <SPCard>
               <SPText fontSize={16} style={styles.title} fontWeight="700">
                 {item.title}
+              </SPText>
+
+              <SPText fontSize={12} style={styles.title} fontWeight="700">
+                ₹{item.amount}
               </SPText>
             </SPCard>
           </SPCard>
@@ -42,6 +47,7 @@ export default function History({navigation}) {
   const isFocused = useIsFocused();
 
   const [cateData, setCateData] = useState([]);
+  const [sum, setSum] = useState(0);
 
   useEffect(() => {
     let allCategory = LocalStorage.getString('categories')
@@ -49,34 +55,58 @@ export default function History({navigation}) {
       : [];
 
     if (isFocused) {
-      console.log('In inFocused Block', allCategory);
+      if (allCategory?.length === 0) {
+        return;
+      }
       setCateData(allCategory);
+
+      const total = allCategory.reduce((accumulator, item) => {
+        const amount = parseInt(item.amount);
+        return accumulator + amount;
+      }, 0);
+
+      setSum(total);
     }
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('AddCategory')}>
-          Add New Category
-        </Button>
+    <>
+      <HeaderButton navigation={navigation} />
+      <View
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: 10,
+          borderColor: 'gray',
+          borderWidth: 1,
+        }}>
+        <Text>
+          Total Left Budget: <Text style={{fontSize: 30}}>₹{sum}</Text>
+        </Text>
       </View>
-
-      {cateData?.length === 0 && (
-        <View style={{flex: 1, marginTop: 200}}>
-          <Error />
+      <SafeAreaView style={styles.container}>
+        <View>
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('AddCategory')}>
+            Add New Category
+          </Button>
         </View>
-      )}
 
-      <FlatList
-        numColumns={2}
-        data={cateData}
-        renderItem={({item}) => <Item item={item} />}
-        keyExtractor={item => item.id}
-      />
-    </SafeAreaView>
+        {cateData?.length === 0 && (
+          <View style={{flex: 1, marginTop: 200}}>
+            <Error navigation={navigation} />
+          </View>
+        )}
+
+        <FlatList
+          numColumns={2}
+          data={cateData}
+          renderItem={({item}) => <Item item={item} />}
+          keyExtractor={item => item.id}
+        />
+      </SafeAreaView>
+    </>
   );
 }
 const styles = StyleSheet.create({
@@ -100,60 +130,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 26,
+    fontSize: 20,
   },
 });
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abfb28ba',
-    title: 'Work',
-    amount: '599',
-  },
-  {
-    id: '3ac68afc-c605a-48d3-a4f8-fbd91aa97f63',
-    title: 'Vacation',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e2d9d72',
-    title: 'Health',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1-471f-bad96-145571e29d72',
-    title: 'Gift',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1a-471f-bd96-145571e29d72',
-    title: 'Food',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1-471fa-bd96-145571e29d72',
-    title: 'Movie',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145a571e29d72',
-    title: 'House',
-    amount: '599',
-  },
 
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29ds72',
-    title: 'Home',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1aa-471f-bd96-145571e29ds72',
-    title: 'Loan',
-    amount: '599',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-14557sa1e29ds72',
-    title: 'Other',
-    amount: '599',
-  },
-];

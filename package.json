@@ -10,16 +10,23 @@
     "test": "jest"
   },
   "dependencies": {
+    "@notifee/react-native": "^7.7.1",
+    "@react-native-clipboard/clipboard": "^1.11.2",
+    "@react-native-community/blur": "^4.3.2",
+    "@react-native-firebase/app": "^17.5.0",
+    "@react-native-firebase/messaging": "^17.5.0",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
+    "@setu/upi-deep-links": "^3.0.0",
     "axios": "^1.4.0",
-    "one-react-native-upi": "^0.1.2",
     "react": "18.2.0",
     "react-native": "^0.71.7",
     "react-native-camera": "^4.2.1",
+    "react-native-chart-kit": "^6.12.0",
     "react-native-gesture-handler": "^2.10.0",
+    "react-native-get-sms-android": "^2.1.0",
     "react-native-haptic-feedback": "^2.0.3",
     "react-native-mmkv": "^2.8.0",
     "react-native-paper": "^5.8.0",
@@ -29,7 +36,10 @@
     "react-native-safe-area-context": "^4.5.2",
     "react-native-screens": "^3.20.0",
     "react-native-status-bar-height": "^2.6.0",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-svg": "^13.9.0",
+    "react-native-vector-icons": "^9.2.0",
+    "one-react-native-upi": "github:tanveerbyn/one-react-native-upi"
+
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

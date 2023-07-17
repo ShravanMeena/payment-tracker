@@ -7,7 +7,8 @@ import TextInput from '../../components/TextInput';
 import BackButton from '../../components/BackButton';
 import {COLORS} from '../../theme';
 import {LocalStorage} from '../../helpers/LocalStorage';
-import {guidGenerator} from '../../utils/commonUtils';
+import {guidGenerator, randomColor} from '../../utils/commonUtils';
+import {onDisplayNotification} from '../../utils/notifeeNotify';
 
 export default function AddCategory({navigation}) {
   const [cateGoryName, setCateGoryName] = useState('');
@@ -26,13 +27,19 @@ export default function AddCategory({navigation}) {
     let newCategoires = {
       amount: amount?.toString(),
       title: cateGoryName,
-      id: guidGenerator(),
+      id: allCategory.length + 1 + Date.now(),
+      color: randomColor(),
     };
 
     LocalStorage.set(
       'categories',
       JSON.stringify([...allCategory, newCategoires]),
     );
+
+    onDisplayNotification({
+      title: '🎉 Congratulations!',
+      body: `You just create a new category (${cateGoryName})`,
+    });
 
     navigation.navigate('Explore');
 
@@ -58,23 +65,27 @@ export default function AddCategory({navigation}) {
   };
 
   return (
-    <Background>
+    <>
       <BackButton goBack={navigation.goBack} />
-      <TextInput
-        label="Category Name"
-        value={cateGoryName}
-        onChangeText={text => setCateGoryName(text)}
-      />
 
-      <TextInput
-        label="Amount"
-        value={amount}
-        onChangeText={text => setAmount(text)}
-      />
+      <Background>
+        <TextInput
+          label="Category Name"
+          value={cateGoryName}
+          onChangeText={text => setCateGoryName(text)}
+        />
 
-      <Button mode="contained" onPress={onSaveChanges}>
-        Save Changes
-      </Button>
-    </Background>
+        <TextInput
+          keyboardType="numeric"
+          label="Amount"
+          value={amount}
+          onChangeText={text => setAmount(text)}
+        />
+
+        <Button mode="contained" onPress={onSaveChanges}>
+          Save Changes
+        </Button>
+      </Background>
+    </>
   );
 }

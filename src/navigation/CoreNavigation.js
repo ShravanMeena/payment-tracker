@@ -13,12 +13,17 @@ import {theme} from '../core/theme';
 import DrawerScreen from '../components/DrawerScreen';
 import {SPColors} from '../theme/SPTheme';
 import QrCodeScannerScreen from '../pages/payment/QrCodeScannerScreen';
+import History from '../pages/payment/History';
+import Explore from '../pages/explore/Explore';
+import FinancePro from '../pages/pro/FinancePro';
+import PaymentScreen from '../pages/payment/PaymentScreen';
 
 const Drawer = createDrawerNavigator();
 
 const CoreNavigation = () => {
   return (
     <Drawer.Navigator
+      initialRouteName="QrCodeScannerScreen"
       drawerContent={props => <DrawerScreen {...props} />}
       screenOptions={{
         headerShown: true,
@@ -30,7 +35,7 @@ const CoreNavigation = () => {
           fontSize: 15,
         },
       }}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name={RootScreens.Main}
         component={MainStackNavigator}
         options={{
@@ -40,14 +45,63 @@ const CoreNavigation = () => {
             <Ionicons name={SPIconName.home} size={22} color={color} />
           ),
         }}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="QrCodeScannerScreen"
         component={QrCodeScannerScreen}
         options={{
           title: SPConstants.profileDrawerTitle,
           drawerIcon: ({color}) => (
             <Ionicons name={SPIconName.person} size={22} color={color} />
+          ),
+        }}
+      /> */}
+        <Drawer.Screen name="PaymentScreen" component={PaymentScreen} />
+
+      <Drawer.Screen
+        name={'QrCodeScannerScreen'}
+        component={QrCodeScannerScreen}
+        options={{
+          title: SPConstants.homeDrawerTitle,
+          headerShown: false,
+          drawerIcon: ({color}) => (
+            <Ionicons name="qrcode-scan" size={22} color={color} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="History"
+        component={History}
+        options={{
+          title: SPConstants.homeDrawerTitle,
+          headerShown: false,
+          drawerIcon: ({color}) => (
+            <Ionicons name="ios-list" size={22} color={color} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name={'Explore'}
+        component={Explore}
+        options={{
+          title: SPConstants.homeDrawerTitle,
+          headerShown: false,
+          drawerIcon: ({color}) => (
+            <Ionicons name="ios-albums-outline" size={22} color={color} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name={'FinancePro'}
+        component={FinancePro}
+        options={{
+          title: SPConstants.homeDrawerTitle,
+          headerShown: false,
+          drawerIcon: ({color}) => (
+            <Ionicons name="ios-albums-outline" size={22} color={color} />
           ),
         }}
       />

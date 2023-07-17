@@ -7,7 +7,7 @@ import TextInput from '../../components/TextInput';
 import BackButton from '../../components/BackButton';
 import {COLORS} from '../../theme';
 import {LocalStorage} from '../../helpers/LocalStorage';
-import {guidGenerator} from '../../utils/commonUtils';
+import { onDisplayNotification } from '../../utils/notifeeNotify';
 
 export default function EditCategory({navigation, route}) {
   let itemValues = route.params.item;
@@ -22,13 +22,13 @@ export default function EditCategory({navigation, route}) {
     setAmount(itemValues.amount);
   }, [itemValues]);
 
-  const onLoginPressed = async () => {
+  const onSaveChange = async () => {
     let allCategory = LocalStorage.getString('categories')
       ? JSON.parse(LocalStorage.getString('categories'))
       : [];
 
     if (!cateGoryName || !amount) {
-      alert('Fill every field');
+      alert('Every field required');
       return;
     }
 
@@ -43,63 +43,46 @@ export default function EditCategory({navigation, route}) {
 
     navigation.navigate('Explore');
 
-    // const phonenumberError = phonenumberValidator(phonenumber.value);
-    // const passwordError = passwordValidator(password.value);
-    // if (phonenumberError || passwordError) {
-    //   setPhoneNumber({...phonenumber, error: phonenumberError});
-    //   setPassword({...password, error: passwordError});
-    //   return;
-    // }
-    // let reqBody = {
-    //   phonenumber: '+91' + phonenumber.value,
-    //   password: password.value,
-    // };
-    // const res = await axiosRequest('post', reqBody, '/accounts/login/');
-    // if (res.status) {
-    //   LocalStorage.set('isLoggedIn', true);
-    //   // navigation.reset({
-    //   //   index: 0,
-    //   //   routes: [{name: 'Dashboard'}],
-    //   // });
-    // }
+    onDisplayNotification({
+      title: 'Great!',
+      body: `You just edited a category (${cateGoryName})`,
+    });
   };
 
   return (
-    <Background>
+    <>
       <BackButton goBack={navigation.goBack} />
-      <TextInput
-        label="Category Name"
-        // returnKeyType="next"
-        value={cateGoryName}
-        onChangeText={text => setCateGoryName(text)}
-        // error={!!cateGoryName.error}
-        // errorText={cateGoryName.error}
-        // autoCapitalize="none"
-        // autoCompleteType="phonenumber"
-      />
 
-      <TextInput
-        label="Amount"
-        value={amount}
-        onChangeText={text => setAmount(text)}
-        // error={!!amount.error}
-        // errorText={amount.error}
-      />
+      <Background>
+        <TextInput
+          label="Category Name"
+          returnKeyType="next"
+          value={cateGoryName}
+          onChangeText={text => setCateGoryName(text)}
+        />
 
-      <Button mode="contained" onPress={onLoginPressed}>
-        Save Changes
-      </Button>
+        <TextInput
+          label="Amount"
+          keyboardType="numeric"
+          value={amount}
+          onChangeText={text => setAmount(text)}
+        />
 
-      <View style={styles.row}>
-        <Text>OR</Text>
-      </View>
+        <Button mode="contained" onPress={onSaveChange}>
+          Save Changes
+        </Button>
 
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate('AddCategory')}>
-        Create New Category
-      </Button>
-    </Background>
+        <View style={styles.row}>
+          <Text>OR</Text>
+        </View>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('AddCategory')}>
+          Create New Category
+        </Button>
+      </Background>
+    </>
   );
 }
 

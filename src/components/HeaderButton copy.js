@@ -1,13 +1,16 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {TouchableOpacity, Image, StyleSheet} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
-export default function BackButton({goBack}) {
+export default function HeaderButton({navigation}) {
   return (
-    <TouchableOpacity onPress={goBack} style={styles.container}>
+    <TouchableOpacity
+      onPress={() => navigation.openDrawer()}
+      style={styles.container}>
       <Image
         style={styles.image}
-        source={require('../assets/arrow_back.png')}
+        source={require('../assets/hambureger.png')}
       />
     </TouchableOpacity>
   );
